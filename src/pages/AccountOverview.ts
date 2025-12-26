@@ -63,4 +63,32 @@ export class AccountOverview extends BasePage {
       totalText?.replace("$", "").replace(",", "").trim()
     );
   }
+
+
+
+  //Newly added method
+    // 🔹 Verify newly created account exists and click it
+  async verifyAndClickAccount(accountId: string): Promise<boolean> {
+
+    // Wait until table is visible
+    await this.accountRows.first().waitFor({ state: "visible" });
+
+    const rows = await this.accountRows.all();
+
+    for (const row of rows) {
+      const accountIdText =
+        (await row.locator("td a").textContent())?.trim();
+
+      if (accountIdText === accountId) {
+        await row.locator("td a").click();
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+
+
 }
