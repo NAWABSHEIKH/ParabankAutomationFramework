@@ -89,6 +89,29 @@ export class AccountOverview extends BasePage {
   }
 
 
+  async getAvailableBalanceFromTable(accountId:string):Promise<string>{
+
+    let availableAmount:string|null;
+    // Wait until table is visible
+    await this.accountRows.first().waitFor({ state: "visible" });
+
+    const rows = await this.accountRows.all();
+
+    for (const row of rows) {
+      const accountIdText =
+        (await row.locator("td a").textContent())?.trim();
+
+      if (accountIdText === accountId) {
+       // page.locator('tr').locator('td').nth(2)
+       availableAmount= await row.locator("td").nth(2).textContent();
+       return availableAmount!;
+      }
+    }
+
+    return `No such account Id: ${accountId} exist`;
+  }
+  }
 
 
-}
+
+
