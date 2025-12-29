@@ -29,8 +29,8 @@ export class TransferFund extends BasePage{
         //expect(await this.transferFundTitle.textContent()).toContain("Transfer Funds")
     }
 
-    async fillAmount_AccouontID_Details(amount:string,srcAccId:string,tarAccId:string){
-       await this.insertAmount.fill(amount);
+    async fillAmount_AccouontID_Details(amount:number,srcAccId:string,tarAccId:string){
+       await this.insertAmount.fill(amount.toString());
        await this.srcAccountID.selectOption(srcAccId);
        await this.targetAccountID.selectOption(tarAccId);
        console.log(`your details Amount: ${amount},SrcAccountId: ${srcAccId},TarAccountId: ${tarAccId}`);

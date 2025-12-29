@@ -89,7 +89,7 @@ export class AccountOverview extends BasePage {
   }
 
 
-  async getAvailableBalanceFromTable(accountId:string):Promise<string>{
+  async getAvailableBalanceFromTable(accountId:string):Promise<number>{
 
     let availableAmount:string|null;
     // Wait until table is visible
@@ -104,11 +104,16 @@ export class AccountOverview extends BasePage {
       if (accountIdText === accountId) {
        // page.locator('tr').locator('td').nth(2)
        availableAmount= await row.locator("td").nth(2).textContent();
-       return availableAmount!;
+      // console.log("available amount: "+availableAmount);
+      // return availableAmount!;
+
+       return Number(
+      availableAmount?.replace("$", "").trim()
+    );
       }
     }
 
-    return `No such account Id: ${accountId} exist`;
+    return -1;
   }
   }
 

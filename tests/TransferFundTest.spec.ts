@@ -59,10 +59,31 @@ import { AccountOverview } from "../src/pages/AccountOverview";
 
         console.log(accountList);
 
+
+       /**
+        * get previous value of account ID
+        */
+         
+       await accountOverview.openAccountsOverview();
+        expect(await accountOverview.getHeadingText())
+      .toContain("Accounts Overview");
+
+
+      const previousBanlanceSrcAccount=await accountOverview.getAvailableBalanceFromTable(accountList[0]);
+     // console.log("previous Source balace availabel money: "+previousBanlanceSrcAccount);
+
+
+       const previousBanlanceTargetAccount=await accountOverview.getAvailableBalanceFromTable(accountList[1]);
+     //  console.log("previous Target balace availabel money: "+previousBanlanceTargetAccount);
+
+       //=======================================//
+
+       let deductMoney=100;
+
         //check the title is visible or not.
         expect(await transferfund.clickAndVerifyTransferFund()).toBeTruthy();
         //pass the value inside the Transfer fund page.
-        await transferfund.fillAmount_AccouontID_Details("100",accountList[0],accountList[1]); 
+        await transferfund.fillAmount_AccouontID_Details(deductMoney,accountList[0],accountList[1]); 
         //click transfer button.
         await transferfund.clickTransferButton();
 
@@ -72,13 +93,17 @@ import { AccountOverview } from "../src/pages/AccountOverview";
         expect(await accountOverview.getHeadingText())
       .toContain("Accounts Overview");
       
+
+      
        const availableBanlanceSrcAccount=await accountOverview.getAvailableBalanceFromTable(accountList[0]);
-       expect(availableBanlanceSrcAccount).toContain("0.00");
+       const checkSrcAvailableBalance=previousBanlanceSrcAccount-deductMoney;
+       expect(availableBanlanceSrcAccount).toBe(checkSrcAvailableBalance);
 
        const availableBanlanceTargetAccount=await accountOverview.getAvailableBalanceFromTable(accountList[1]);
-       expect(availableBanlanceTargetAccount).toContain("200");
+        const checkTargetAvailableBalance=previousBanlanceTargetAccount+deductMoney;
+       expect(availableBanlanceTargetAccount).toBe(checkTargetAvailableBalance);
 
-
+        console.log(`Source available amount ${checkSrcAvailableBalance} Target available amount ${checkTargetAvailableBalance}`);
     })
 
  })
