@@ -115,8 +115,35 @@ export class AccountOverview extends BasePage {
 
     return -1;
   }
+
+  async getBalanceFromTable(accountID:string):Promise<number>{
+
+    let availableAmount:string|null;
+    // Wait until table is visible
+    await this.accountRows.first().waitFor({ state: "visible" });
+
+    const rows = await this.accountRows.all();
+
+    for (const row of rows) {
+      const accountIdText =
+        (await row.locator("td a").textContent())?.trim();
+
+      if (accountIdText === accountID) {
+       // page.locator('tr').locator('td').nth(1)
+       availableAmount= await row.locator("td").nth(1).textContent();
+      // console.log("available amount: "+availableAmount);
+      // return availableAmount!;
+
+       return Number(
+      availableAmount?.replace("$", "").trim()
+    );
+  }
+}
+return -1;
+
+
   }
 
 
-
-
+  
+}
