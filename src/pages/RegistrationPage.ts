@@ -17,10 +17,12 @@ export class RegistrationPage extends BasePage {
     readonly confirmPassword: Locator;
     readonly registerBtn: Locator;
     readonly successMsg: Locator;
+    private readonly logout:Locator;
 
     constructor(page: Page) {
         super(page);
 
+        this.logout=page.getByRole("link",{name:"Log Out"});
         this.registerLink = page.getByRole("link", { name: /register/i });
 
         this.firstname = page.locator('#customer\\.firstName');
@@ -77,6 +79,10 @@ export class RegistrationPage extends BasePage {
 
     async getSuccessMessage() {
         return await this.successMsg.textContent();
+    }
+
+    async clickLogoutBtn(){
+        await this.logout.click();
     }
 }
 
