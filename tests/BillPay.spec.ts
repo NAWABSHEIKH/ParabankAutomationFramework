@@ -193,6 +193,7 @@ test.describe("Bill Pay",()=>{
     const amountLeft:string=(allTransactionDetails[4]);
 
 
+    console.log("Transaction Id: "+transactionId);
     // expect(transactionId).toBe(getNewAccountID);
     expect(paymentByPerson).toContain(name);
     expect(transactionType).toContain("Debit");
