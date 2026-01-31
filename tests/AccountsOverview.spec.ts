@@ -39,7 +39,7 @@ test.describe("Accounts Overview", () => {
   });
 
 
-  test("Verify newly created account appears in Accounts Overview", async ({ page }) => {
+  test.only("Verify newly created account appears in Accounts Overview", async ({ page }) => {
 
     const loginPage = new LoginPage(page);
     const openNewAccount = new OpenNewAccount(page);
