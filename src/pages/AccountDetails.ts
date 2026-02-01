@@ -53,7 +53,10 @@ export class AccountDetails extends BasePage{
 
 
      async getAccountType():Promise<string|null>{
-         await this.accountType.waitFor({state:'visible',timeout:3000});
+
+    await this.accountType.filter({ hasText: /./ }).waitFor({ state: "visible" });
+
+        //  await this.accountType.waitFor({state:'visible',timeout:3000});
         return await this.accountType.textContent();
      }
 
