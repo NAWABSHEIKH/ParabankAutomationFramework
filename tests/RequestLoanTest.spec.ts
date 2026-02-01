@@ -4,6 +4,7 @@ import { OpenNewAccount } from "../src/pages/OpenNewAccount";
 import { AccountOverview } from "../src/pages/AccountOverview";
 import { staticData } from "../src/utils/data";
 import { RequestLoan } from "../src/pages/RequestLoan";
+import { AccountDetails } from "../src/pages/AccountDetails";
 
 test.describe("Request Loan",()=>{
     test("Deny or  Accept Request Loan",async ({page})=>{
@@ -51,7 +52,7 @@ test.describe("Request Loan",()=>{
     await requestLoan.clickLoanRequestLinkAndVerifyHeading();
 
 
-    await requestLoan.applyLoan("100","50",newAccountId);
+    await requestLoan.applyLoan("100000000","50",newAccountId);
     await requestLoan.submitApplyBtn();
 
 
@@ -66,16 +67,31 @@ test.describe("Request Loan",()=>{
     expect(responseDate.length).toBeGreaterThan(0);
     expect(decisionMessage.length).toBeGreaterThan(0);
 
+    const accoutDetails=new AccountDetails(page);
+
     if (decisionMessage.includes("cannot grant a loan")) {
   expect(loanStatus).toContain("Denied");
      } else {
   const loanAccountId = await requestLoan.getAccountIdOnSuccess();
   expect(loanStatus).toContain("Approved");
   expect(loanAccountId).toMatch(/\d+/);
+
+
+  // 4️⃣ Navigate to Accounts Overview
+       await accountOverview.openAccountsOverview();
+
+    // 5️⃣ Verify account exists and click it
+       const loanAccountFound =
+      await accountOverview.verifyAndClickAccount(loanAccountId);
+
+      expect(loanAccountFound).toBeTruthy();
+      expect(await accoutDetails.getAccountType()).toContain("LOAN");
  }
 
 
+// =========== search your loan account in account overview
 
+     
     // console.log("1"+await requestLoan.getLoanStatus());
     // console.log("2"+await requestLoan.getLoanProvider());
     // console.log("3"+await requestLoan.getResponseDate());
